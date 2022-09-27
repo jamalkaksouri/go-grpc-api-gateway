@@ -2,10 +2,9 @@ package routes
 
 import (
 	"context"
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 	"github.com/jamalkaksouri/go-grpc-api-gateway/pkg/auth/pb"
+	"net/http"
 )
 
 type RegisterRequestBody struct {
@@ -31,5 +30,5 @@ func Register(ctx *gin.Context, c pb.AuthServiceClient) {
 		return
 	}
 
-	ctx.JSON(int(res.Status), &res)
+	ctx.JSON(http.StatusCreated, res)
 }
