@@ -8,21 +8,24 @@ import (
 	"strings"
 )
 
-type MiddlewareConfigAuth struct {
+type AuthMiddlewareConfig struct {
 	svc *ServiceClient
 }
 
-func InitAuthMiddleware(svc *ServiceClient) MiddlewareConfigAuth {
-	return InitAuthMiddleware(svc)
+func InitAuthMiddleware(svc *ServiceClient) AuthMiddlewareConfig {
+	return AuthMiddlewareConfig{svc}
 }
 
-func (c *MiddlewareConfigAuth) AuthRequired(ctx *gin.Context) {
+func (c *AuthMiddlewareConfig) AuthRequired(ctx *gin.Context) {
 	authorization := ctx.Request.Header.Get("authorization")
+
 	if authorization == "" {
 		ctx.AbortWithStatus(http.StatusUnauthorized)
 		return
 	}
+
 	token := strings.Split(authorization, "Bearer ")
+
 	if len(token) < 2 {
 		ctx.AbortWithStatus(http.StatusUnauthorized)
 		return
@@ -38,5 +41,6 @@ func (c *MiddlewareConfigAuth) AuthRequired(ctx *gin.Context) {
 	}
 
 	ctx.Set("userId", res.UserId)
+
 	ctx.Next()
 }

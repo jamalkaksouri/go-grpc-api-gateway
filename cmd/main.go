@@ -1,61 +1,27 @@
 package main
 
 import (
-	"fmt"
-	"strconv"
+	"github.com/gin-gonic/gin"
+	"github.com/jamalkaksouri/go-grpc-api-gateway/pkg/auth"
+	"github.com/jamalkaksouri/go-grpc-api-gateway/pkg/config"
+	"github.com/jamalkaksouri/go-grpc-api-gateway/pkg/order"
+	"github.com/jamalkaksouri/go-grpc-api-gateway/pkg/product"
+	"log"
 )
 
 func main() {
-	opMap := map[string]opFuncType{
-		"+": add,
-		"-": sub,
-		"*": mul,
-		"/": div,
+	c, err := config.LoadConfig()
+
+	if err != nil {
+		log.Fatalln("Failed at config", err)
 	}
 
-	expressions := [][]string{
-		{"1", "+", "2"},
-		{"2", "-", "3"},
-		{"8", "*", "2"},
-		{"15", "/", "2"},
-		{"15", "%", "2"},
-		{"15"},
-		{"Two", "-", "One"},
-	}
+	//gin.SetMode(gin.ReleaseMode)
+	r := gin.Default()
 
-	for _, expression := range expressions {
-		if len(expression) < 3 {
-			fmt.Println("invalid expression", expression)
-			continue
-		}
+	authSvc := *auth.RegisterRoutes(r, &c)
+	product.RegisterRoutes(r, &c, &authSvc)
+	order.RegisterRoutes(r, &c, &authSvc)
 
-		p1, err := strconv.Atoi(expression[0])
-		if err != nil {
-			fmt.Println(err)
-			continue
-		}
-
-		op := expression[1]
-		opFunc, ok := opMap[op]
-		if !ok {
-			fmt.Println("unsupported operator", op)
-			continue
-		}
-
-		p2, err := strconv.Atoi(expression[2])
-		if err != nil {
-			fmt.Println(err)
-			continue
-		}
-
-		result := opFunc(p1, p2)
-		fmt.Println(result)
-	}
+	r.Run(c.Port)
 }
-
-type opFuncType func(i, j int) int
-
-func add(i, j int) int { return i + j }
-func sub(i, j int) int { return i - j }
-func mul(i, j int) int { return i * j }
-func div(i, j int) int { return i / j }

@@ -1,10 +1,10 @@
-package product
+package order
 
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/jamalkaksouri/go-grpc-api-gateway/pkg/auth"
 	"github.com/jamalkaksouri/go-grpc-api-gateway/pkg/config"
-	"github.com/jamalkaksouri/go-grpc-api-gateway/pkg/product/routes"
+	"github.com/jamalkaksouri/go-grpc-api-gateway/pkg/order/routes"
 )
 
 func RegisterRoutes(r *gin.Engine, c *config.Config, authSvc *auth.ServiceClient) {
@@ -14,16 +14,11 @@ func RegisterRoutes(r *gin.Engine, c *config.Config, authSvc *auth.ServiceClient
 		Client: InitServiceClient(c),
 	}
 
-	routes := r.Group("/product")
+	routes := r.Group("/order")
 	routes.Use(a.AuthRequired)
-	routes.POST("/", svc.CreateProduct)
-	routes.GET("/:id", svc.FindOne)
+	routes.POST("/", svc.CreateOrder)
 }
 
-func (svc *ServiceClient) FindOne(ctx *gin.Context) {
-	routes.FineOne(ctx, svc.Client)
-}
-
-func (svc *ServiceClient) CreateProduct(ctx *gin.Context) {
-	routes.CreateProduct(ctx, svc.Client)
+func (svc *ServiceClient) CreateOrder(ctx *gin.Context) {
+	routes.CreateOrder(ctx, svc.Client)
 }
