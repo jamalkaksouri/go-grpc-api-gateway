@@ -8,15 +8,15 @@ import (
 	"strings"
 )
 
-type AuthMiddlewareConfig struct {
+type MiddlewareConfig struct {
 	svc *ServiceClient
 }
 
-func InitAuthMiddleware(svc *ServiceClient) AuthMiddlewareConfig {
-	return AuthMiddlewareConfig{svc}
+func InitAuthMiddleware(svc *ServiceClient) MiddlewareConfig {
+	return MiddlewareConfig{svc}
 }
 
-func (c *AuthMiddlewareConfig) AuthRequired(ctx *gin.Context) {
+func (c *MiddlewareConfig) AuthRequired(ctx *gin.Context) {
 	authorization := ctx.Request.Header.Get("authorization")
 
 	if authorization == "" {

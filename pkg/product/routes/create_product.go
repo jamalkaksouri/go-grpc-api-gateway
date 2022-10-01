@@ -17,7 +17,7 @@ func CreateProduct(ctx *gin.Context, c pb.ProductServiceClient) {
 	b := CreateProductRequestBody{}
 
 	if err := ctx.BindJSON(&b); err != nil {
-		ctx.AbortWithError(http.StatusBadRequest, err)
+		_ = ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
@@ -28,7 +28,7 @@ func CreateProduct(ctx *gin.Context, c pb.ProductServiceClient) {
 	})
 
 	if err != nil {
-		ctx.AbortWithError(http.StatusBadGateway, err)
+		_ = ctx.AbortWithError(http.StatusBadGateway, err)
 		return
 	}
 

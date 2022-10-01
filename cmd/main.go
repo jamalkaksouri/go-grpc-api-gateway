@@ -18,10 +18,13 @@ func main() {
 
 	//gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
-
+	
 	authSvc := *auth.RegisterRoutes(r, &c)
 	product.RegisterRoutes(r, &c, &authSvc)
 	order.RegisterRoutes(r, &c, &authSvc)
 
-	r.Run(c.Port)
+	err = r.Run(c.Port)
+	if err != nil {
+		log.Println("api gateway run failed!")
+	}
 }

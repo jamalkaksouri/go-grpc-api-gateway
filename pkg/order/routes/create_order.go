@@ -16,7 +16,7 @@ func CreateOrder(ctx *gin.Context, c pb.OrderServiceClient) {
 	b := CreateOrderRequestBody{}
 
 	if err := ctx.BindJSON(&b); err != nil {
-		ctx.AbortWithError(http.StatusBadRequest, err)
+		_ = ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
@@ -29,7 +29,7 @@ func CreateOrder(ctx *gin.Context, c pb.OrderServiceClient) {
 	})
 
 	if err != nil {
-		ctx.AbortWithError(http.StatusBadGateway, err)
+		_ = ctx.AbortWithError(http.StatusBadGateway, err)
 		return
 	}
 

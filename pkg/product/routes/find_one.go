@@ -2,6 +2,7 @@ package routes
 
 import (
 	"context"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/jamalkaksouri/go-grpc-api-gateway/pkg/product/pb"
 	"net/http"
@@ -12,7 +13,10 @@ func FineOne(ctx *gin.Context, c pb.ProductServiceClient) {
 	id, err := strconv.ParseInt(ctx.Param("id"), 10, 32)
 
 	if err != nil {
-		ctx.AbortWithError(http.StatusBadGateway, err)
+		err := ctx.AbortWithError(http.StatusBadGateway, err)
+		if err != nil {
+			fmt.Println(http.ErrAbortHandler, err)
+		}
 		return
 	}
 
@@ -21,7 +25,10 @@ func FineOne(ctx *gin.Context, c pb.ProductServiceClient) {
 	})
 
 	if err != nil {
-		ctx.AbortWithError(http.StatusBadGateway, err)
+		err := ctx.AbortWithError(http.StatusBadGateway, err)
+		if err != nil {
+			fmt.Println(http.ErrAbortHandler, err)
+		}
 		return
 	}
 

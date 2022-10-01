@@ -16,7 +16,7 @@ func Login(ctx *gin.Context, c pb.AuthServiceClient) {
 	b := LoginRequestBody{}
 
 	if err := ctx.BindJSON(&b); err != nil {
-		ctx.AbortWithError(http.StatusBadRequest, err)
+		_ = ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
@@ -26,7 +26,7 @@ func Login(ctx *gin.Context, c pb.AuthServiceClient) {
 	})
 
 	if err != nil {
-		ctx.AbortWithError(http.StatusBadGateway, err)
+		_ = ctx.AbortWithError(http.StatusBadGateway, err)
 		return
 	}
 
