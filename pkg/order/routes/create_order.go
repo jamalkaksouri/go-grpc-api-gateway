@@ -2,6 +2,7 @@ package routes
 
 import (
 	"context"
+	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/jamalkaksouri/go-grpc-api-gateway/pkg/order/pb"
 	"net/http"
@@ -20,7 +21,11 @@ func CreateOrder(ctx *gin.Context, c pb.OrderServiceClient) {
 		return
 	}
 
-	userId, _ := ctx.Get("userId")
+	userId, ok := ctx.Get("userId")
+	if !ok {
+		_ = ctx.AbortWithError(http.StatusNotFound, errors.New("user not found"))
+		return
+	}
 
 	res, err := c.CreateOrder(context.Background(), &pb.CreateOrderRequest{
 		ProductId: b.ProductId,
