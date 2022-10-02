@@ -18,7 +18,7 @@ func main() {
 
 	//gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
-	
+
 	authSvc := *auth.RegisterRoutes(r, &c)
 	product.RegisterRoutes(r, &c, &authSvc)
 	order.RegisterRoutes(r, &c, &authSvc)
