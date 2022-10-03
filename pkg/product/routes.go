@@ -18,6 +18,7 @@ func RegisterRoutes(r *gin.Engine, c *config.Config, authSvc *auth.ServiceClient
 	routesGroup.Use(a.AuthRequired)
 	routesGroup.POST("/", svc.CreateProduct)
 	routesGroup.GET("/:id", svc.FindOne)
+	routesGroup.POST("/:id", svc.DecreaseStock)
 }
 
 func (svc *ServiceClient) FindOne(ctx *gin.Context) {
@@ -26,4 +27,8 @@ func (svc *ServiceClient) FindOne(ctx *gin.Context) {
 
 func (svc *ServiceClient) CreateProduct(ctx *gin.Context) {
 	routes.CreateProduct(ctx, svc.Client)
+}
+
+func (svc *ServiceClient) DecreaseStock(ctx *gin.Context) {
+	routes.DecreaseStock(ctx, svc.Client)
 }
